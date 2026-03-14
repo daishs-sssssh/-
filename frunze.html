@@ -3,97 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TAZA SHOP - Фрунзенский Каталог</title>
+    <title>TAZA SHOP - Фрунзенский</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --accent-color: #00838f; --bg-color: #fcfdfe; --wa-green: #25d366; }
-        body { font-family: 'Montserrat', sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; color: #37474f; }
+        :root { --main: #00838f; --wa: #25d366; }
+        body { font-family: 'Montserrat', sans-serif; background: #f4f7f6; margin: 0; padding-bottom: 90px; }
         
-        /* Шапка */
-        .header { 
-            background: white; 
-            padding: 25px 20px; 
-            text-align: center; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            border-bottom: 3px solid var(--accent-color);
-        }
-        .header h1 { color: var(--accent-color); margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 1px; }
-        .header p { font-size: 13px; font-weight: 600; margin-top: 8px; color: #78909c; }
-        .status { font-size: 11px; color: #e53935; font-weight: 700; margin-top: 5px; }
+        .header { background: white; padding: 15px; text-align: center; border-bottom: 4px solid var(--main); position: sticky; top: 0; z-index: 100; }
+        .header h1 { color: var(--main); margin: 0; font-size: 18px; text-transform: uppercase; }
 
-        /* Каталог */
-        .container { padding: 20px; max-width: 500px; margin: 0 auto; }
-        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        
-        .product-card { 
-            background: white; border-radius: 18px; padding: 12px; 
-            text-align: center; box-shadow: 0 6px 15px rgba(0,0,0,0.04);
-            border: 1px solid #eceff1;
-            transition: transform 0.2s;
+        /* Категориялар */
+        .categories { 
+            display: flex; overflow-x: auto; padding: 10px; gap: 10px; 
+            background: white; white-space: nowrap; border-bottom: 1px solid #eee;
         }
-        
-        .product-card:active { transform: scale(0.97); }
-        
-        .product-img { 
-            width: 100%; height: 130px; object-fit: contain; 
-            border-radius: 12px; background: #fdfdfd; 
+        .cat-btn { 
+            padding: 8px 15px; background: #f0f0f0; border-radius: 20px; 
+            border: none; font-size: 12px; font-weight: 600; cursor: pointer;
         }
-        
-        .product-name { font-size: 14px; font-weight: 600; margin: 12px 0 6px; color: #263238; height: 34px; overflow: hidden; }
-        .product-price { font-size: 17px; font-weight: 700; color: #2e7d32; margin-bottom: 12px; }
-        
-        .buy-btn { 
-            background: var(--wa-green); color: white; text-decoration: none; 
-            display: flex; align-items: center; justify-content: center;
-            padding: 10px; border-radius: 12px; font-size: 12px; font-weight: 700;
-        }
-        .buy-btn img { width: 16px; margin-right: 5px; filter: brightness(0) invert(1); }
+        .cat-btn.active { background: var(--main); color: white; }
 
-        .footer { text-align: center; padding: 30px; color: #b0bec5; font-size: 11px; letter-spacing: 1px; }
+        .container { padding: 15px; max-width: 450px; margin: 0 auto; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        
+        .card { background: white; border-radius: 15px; padding: 10px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.03); display: flex; flex-direction: column; }
+        .card img { width: 100%; height: 110px; object-fit: contain; background: #f9f9f9; border-radius: 8px; }
+        .name { font-size: 12px; font-weight: 600; margin: 8px 0; height: 32px; overflow: hidden; line-height: 1.2; }
+        .price { font-size: 14px; font-weight: 700; color: #2e7d32; margin-bottom: 8px; }
+        
+        .add-btn { 
+            background: var(--main); color: white; border: none; width: 100%;
+            padding: 8px; border-radius: 8px; font-weight: 700; font-size: 11px; cursor: pointer;
+        }
+
+        /* Корзина панели */
+        .cart-panel { 
+            position: fixed; bottom: 0; width: 100%; max-width: 500px; 
+            background: white; padding: 15px; box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+            display: none; justify-content: space-between; align-items: center; z-index: 200;
+        }
+        .order-btn { 
+            background: var(--wa); color: white; text-decoration: none;
+            padding: 12px 20px; border-radius: 12px; font-weight: 700; font-size: 14px;
+        }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h1>Таза Шоп • Фрунзенский</h1>
-        <p>📍 Курманжан Датка 80</p>
-        <div class="status">🕒 Иштөө убактысы: 09:00 - 22:00</div>
+    </div>
+
+    <div class="categories" id="catList">
+        <button class="cat-btn active" onclick="filterCat('all', this)">Баары</button>
+        <button class="cat-btn" onclick="filterCat('тиш', this)">Тиш жуучу</button>
+        <button class="cat-btn" onclick="filterCat('кир', this)">Кир жуучу</button>
+        <button class="cat-btn" onclick="filterCat('идиш', this)">Идиш жуучу</button>
     </div>
 
     <div class="container">
-        <div class="product-grid" id="productGrid">
-            </div>
+        <div class="grid" id="products"></div>
     </div>
 
-    <div class="footer">TAZA SHOP FRUNZE • 2026</div>
+    <div class="cart-panel" id="cartPanel">
+        <div><span id="cartCount">0</span> товар | <b id="cartTotal">0</b> сом</div>
+        <a href="#" class="order-btn" onclick="sendOrder()">Заказ берүү (WA)</a>
+    </div>
 
     <script>
-        // Фрунзенский филиалынын WhatsApp номерин жазыңыз
-        const frunzePhone = "996755008422"; 
+        const phone = "996755008422"; // Өзүңүздүн номериңизди жазыңыз
+        let cart = [];
 
-        // ТОВАРЛАРДЫН ТИЗМЕСИ
-        let products = [
-            { id: 1, name: "Суюк самын ", price: "185 сом", img: "logo.jpg" },
-            { id: 2, name: "Порошок Tide 3кг", price: "480 сом", img: "https://via.placeholder.com/150" },
-            { id: 3, name: "Domestos 750мл", price: "190 сом", img: "https://via.placeholder.com/150" },
-            { id: 4, name: "Шампунь Clear", price: "320 сом", img: "https://via.placeholder.com/150" }
+        // ТОВАРЛАРДЫН ТИЗМЕСИ (category кошулду)
+        const productsList = [
+            { id: 1, category: "кир", name: "Порошок Tide 3кг", price: 450, img: "logo.jpg" },
+            { id: 2, category: "идиш", name: "Fairy 450мл", price: 120, img: "logo.jpg" },
+            { id: 3, category: "тиш", name: "Colgate тиш пастасы", price: 110, img: "logo.jpg" },
+            { id: 4, category: "тиш", name: "Oral-B тиш щеткасы", price: 95, img: "logo.jpg" },
+            { id: 5, category: "кир", name: "Ariel автомат 1.5кг", price: 320, img: "logo.jpg" }
         ];
 
-        function renderProducts() {
-            const grid = document.getElementById('productGrid');
+        function renderProducts(filter = 'all') {
+            const grid = document.getElementById('products');
             grid.innerHTML = "";
-            products.forEach(p => {
+            
+            const filtered = filter === 'all' ? productsList : productsList.filter(p => p.category === filter);
+            
+            filtered.forEach(p => {
                 grid.innerHTML += `
-                    <div class="product-card">
-                        <img src="${p.img}" class="product-img" alt="${p.name}">
-                        <div class="product-name">${p.name}</div>
-                        <div class="product-price">${p.price}</div>
-                        <a href="https://wa.me/${frunzePhone}?text=Саламатсызбы! Фрунзенский филиалынан заказ берейин дедим эле: ${p.name}" class="buy-btn">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"> ЗАКАЗ БЕРҮҮ
-                        </a>
+                    <div class="card">
+                        <img src="${p.img}">
+                        <div class="name">${p.name}</div>
+                        <div class="price">${p.price} сом</div>
+                        <button class="add-btn" onclick="addToCart(${p.id})">Корзинага +</button>
                     </div>
                 `;
             });
+        }
+
+        function filterCat(cat, btn) {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderProducts(cat);
+        }
+
+        function addToCart(id) {
+            const product = productsList.find(p => p.id === id);
+            cart.push(product);
+            updateCart();
+        }
+
+        function updateCart() {
+            const panel = document.getElementById('cartPanel');
+            panel.style.display = 'flex';
+            document.getElementById('cartCount').innerText = cart.length;
+            document.getElementById('cartTotal').innerText = cart.reduce((sum, p) => sum + p.price, 0);
+        }
+
+        function sendOrder() {
+            let text = "Саламатсызбы! Фрунзенский филиалынан заказ:\n\n";
+            cart.forEach((p, i) => text += `${i+1}. ${p.name} - ${p.price} сом\n`);
+            text += `\nЖалпы сумма: ${document.getElementById('cartTotal').innerText} сом`;
+            window.location.href = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
         }
 
         renderProducts();
