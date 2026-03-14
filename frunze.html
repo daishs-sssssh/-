@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAZA SHOP - Фрунзенский Каталог</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --accent-color: #00838f; --bg-color: #fcfdfe; --wa-green: #25d366; }
+        body { font-family: 'Montserrat', sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; color: #37474f; }
+        
+        /* Шапка */
+        .header { 
+            background: white; 
+            padding: 25px 20px; 
+            text-align: center; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-bottom: 3px solid var(--accent-color);
+        }
+        .header h1 { color: var(--accent-color); margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 1px; }
+        .header p { font-size: 13px; font-weight: 600; margin-top: 8px; color: #78909c; }
+        .status { font-size: 11px; color: #e53935; font-weight: 700; margin-top: 5px; }
+
+        /* Каталог */
+        .container { padding: 20px; max-width: 500px; margin: 0 auto; }
+        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        .product-card { 
+            background: white; border-radius: 18px; padding: 12px; 
+            text-align: center; box-shadow: 0 6px 15px rgba(0,0,0,0.04);
+            border: 1px solid #eceff1;
+            transition: transform 0.2s;
+        }
+        
+        .product-card:active { transform: scale(0.97); }
+        
+        .product-img { 
+            width: 100%; height: 130px; object-fit: contain; 
+            border-radius: 12px; background: #fdfdfd; 
+        }
+        
+        .product-name { font-size: 14px; font-weight: 600; margin: 12px 0 6px; color: #263238; height: 34px; overflow: hidden; }
+        .product-price { font-size: 17px; font-weight: 700; color: #2e7d32; margin-bottom: 12px; }
+        
+        .buy-btn { 
+            background: var(--wa-green); color: white; text-decoration: none; 
+            display: flex; align-items: center; justify-content: center;
+            padding: 10px; border-radius: 12px; font-size: 12px; font-weight: 700;
+        }
+        .buy-btn img { width: 16px; margin-right: 5px; filter: brightness(0) invert(1); }
+
+        .footer { text-align: center; padding: 30px; color: #b0bec5; font-size: 11px; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Таза Шоп • Фрунзенский</h1>
+        <p>📍 Курманжан Датка 80</p>
+        <div class="status">🕒 Иштөө убактысы: 09:00 - 22:00</div>
+    </div>
+
+    <div class="container">
+        <div class="product-grid" id="productGrid">
+            </div>
+    </div>
+
+    <div class="footer">TAZA SHOP FRUNZE • 2026</div>
+
+    <script>
+        // Фрунзенский филиалынын WhatsApp номерин жазыңыз
+        const frunzePhone = "996XXXXXXXXX"; 
+
+        // ТОВАРЛАРДЫН ТИЗМЕСИ
+        let products = [
+            { id: 1, name: "Суюк самын (Фрунзе)", price: "185 сом", img: "logo.jpg" },
+            { id: 2, name: "Порошок Tide 3кг", price: "480 сом", img: "https://via.placeholder.com/150" },
+            { id: 3, name: "Domestos 750мл", price: "190 сом", img: "https://via.placeholder.com/150" },
+            { id: 4, name: "Шампунь Clear", price: "320 сом", img: "https://via.placeholder.com/150" }
+        ];
+
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = "";
+            products.forEach(p => {
+                grid.innerHTML += `
+                    <div class="product-card">
+                        <img src="${p.img}" class="product-img" alt="${p.name}">
+                        <div class="product-name">${p.name}</div>
+                        <div class="product-price">${p.price}</div>
+                        <a href="https://wa.me/${frunzePhone}?text=Саламатсызбы! Фрунзенский филиалынан заказ берейин дедим эле: ${p.name}" class="buy-btn">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"> ЗАКАЗ БЕРҮҮ
+                        </a>
+                    </div>
+                `;
+            });
+        }
+
+        renderProducts();
+    </script>
+</body>
+</html>
